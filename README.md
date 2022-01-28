@@ -13,13 +13,10 @@ Ce projet explore cette nouvelle ère de la cartographie et présente la manièr
 
 # Ressources
                 <table>
-                    <thead>
                         <tr>
                           <th scope="col">Ressource</th>
                           <th scope="col">Lien</th>
                         </tr>
-                      </thead>
-                      <tbody>
                         <tr>
                             <td>HTML</td>
                             <td><a href="https://www.w3schools.com/html/" style="color: blue; margin-bottom: 20px; margin-top: 5px;">HTML Tutorial sur W3 Schools</a></td>
@@ -60,5 +57,4 @@ Ce projet explore cette nouvelle ère de la cartographie et présente la manièr
                             <td>phpMyAdmin</td>
                             <td><a href="https://www.phpmyadmin.net/" style="color: blue; margin-bottom: 20px; margin-top: 5px;">Documentation de phpMyAdmin</a></td>
                         </tr>
-                      </tbody>
                 </table>
