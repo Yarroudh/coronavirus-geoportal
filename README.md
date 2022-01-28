@@ -1,3 +1,9 @@
+# Avant-propos
+
+Je tiens tout d’abord à remercier notre cher professeur, Pr Hajji Hicham, pour le soutien qu’il nous a apporté dans la matière de Web Mapping, le temps passé ensemble et le partage de son expertise au quotidien.
+
+Durant ce projet, j'ai eu l’occasion de concevoir un petit géoportail pour suivre l'évolution de la situation pandémique de COVID-19 dans la région d'Oriental, ce qui m'a permis d’acquérir de nouvelles connaissances et compétences en Cartographie Internet. Celles-ci me seront fort précieuses pour la réalisation de mes projets à venir.
+
 # Contexte du projet
 
 Concevoir et partager des cartes sur internet sont des enjeux essentiels pour le secteur de la cartographie qui doit aujourd’hui faire face aux évolutions majeures des techniques de Web Mapping.
@@ -12,6 +18,7 @@ Deux approches différentes peuvent être considérées :
 Ce projet explore cette nouvelle ère de la cartographie et présente la manière de créer et distribuer des cartes en utilisant Leaflet comme outil gratuit de Cartographie Internet.
 
 # Ressources
+
 <table>
   <tr>
     <th>Ressource</th>
