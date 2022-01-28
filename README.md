@@ -12,15 +12,15 @@ Deux approches différentes peuvent être considérées :
 Ce projet explore cette nouvelle ère de la cartographie et présente la manière de créer et distribuer des cartes en utilisant Leaflet comme outil gratuit de Cartographie Internet.
 
 # Ressources
-                <table>
-                        <tr>
-                          <th scope="col">Ressource</th>
-                          <th scope="col">Lien</th>
-                        </tr>
-                        <tr>
-                            <td>HTML</td>
-                            <td><a href="https://www.w3schools.com/html/" style="color: blue; margin-bottom: 20px; margin-top: 5px;">HTML Tutorial sur W3 Schools</a></td>
-                        </tr>
+<table>
+  <tr>
+    <th>Ressource</th>
+    <th>Lien</th>
+  </tr>
+  <tr>
+    <td>HTML</td>
+    <td><a href="https://www.w3schools.com/html/" style="color: blue; margin-bottom: 20px; margin-top: 5px;">HTML Tutorial sur W3 Schools</a></td>
+  </tr>
                         <tr>
                             <td>CSS</td>
                             <td><a href="https://www.w3schools.com/css/" style="color: blue; margin-bottom: 20px; margin-top: 5px;">CSS Tutorial sur W3 Schools</a></td>
