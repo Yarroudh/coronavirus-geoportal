@@ -12,7 +12,7 @@ Deux approches différentes peuvent être considérées :
 Ce projet explore cette nouvelle ère de la cartographie et présente la manière de créer et distribuer des cartes en utilisant Leaflet comme outil gratuit de Cartographie Internet.
 
 # Ressources
-                <table class="table table-hover">
+                <table>
                     <thead>
                         <tr>
                           <th scope="col">Ressource</th>
