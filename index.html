@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Accueil | COVID-19</title>
+    <link rel="icon" href="img/icon.png">
+
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+    <link rel="stylesheet" href="fonts/font-awesome.min.css">
+
+    <link rel="stylesheet" href="css/leaflet.css" />
+	<script src="js/leaflet.js"></script>
+
+    <script src="json/22_11_2021.geojson" type="text/javascript"></script>
+	<script src="json/23_11_2021.geojson" type="text/javascript"></script>
+    <script src="json/24_11_2021.geojson" type="text/javascript"></script>
+    <script src="json/25_11_2021.geojson" type="text/javascript"></script>
+    <script src="json/26_11_2021.geojson" type="text/javascript"></script>
+    <script src="json/27_11_2021.geojson" type="text/javascript"></script>
+    <script src="json/28_11_2021.geojson" type="text/javascript"></script>
+    <script src="json/29_11_2021.geojson" type="text/javascript"></script>
+
+	<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+
+	<link href="css/mobiscroll.javascript.min.css" rel="stylesheet" />
+	<script src="js/mobiscroll.javascript.min.js"></script>
+
+	<link rel="stylesheet" type="text/css" href="css/L.Control.ZoomBar.css"/>
+	<script type="text/javascript" src="js/L.Control.ZoomBar.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-light navbar-expand-lg fixed-top" id="mainNav">
+        <div class="container"><a class="navbar-brand" href="index.html">GÉOPORTAIL</a><button data-bs-toggle="collapse" data-bs-target="#navbarResponsive" class="navbar-toggler" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
+                    <li class="nav-item"><a class="nav-link" href="data.html">Données</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">À propos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contactez-nous</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <header class="masthead" style="background-image:url('img/mask.jpg'); margin-bottom: 0px;">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-lg-8 mx-auto position-relative">
+                    <div class="site-heading">
+                        <h1>GÉOPORTAIL DE COVID-19</h1><span class="subheading"><strong>Évolution de la situation pandémique dans la région de l'Oriental</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+	<section>
+			<div style="width: 550px; margin: 20px; display: inline-block" class="box">
+				<label style="font-weight: bold;">
+					Bulletin Quotidien :
+					<input id="demo-date" mbsc-input placeholder="Merci de choisir une date" value="" onchange="changeDate(); changeDay(); mapIt(day, mymap, geojson);"/>
+				</label>
+			</div>
+
+			<input type="hidden" id="dates" value="" />
+			<input type="hidden" id="day" value="" />
+
+
+		<script>
+			mobiscroll.setOptions({
+				locale: mobiscroll.localeFr,
+				theme: 'ios',
+				themeVariant: 'light',
+				dateFormat: 'DDD D MMM YYYY',
+			});
+
+			var nowCal = mobiscroll.datepicker('#demo-date', {
+				controls: ['calendar'],
+				min: '2021-11-22',
+				max: '2021-11-29',
+				calendarType: 'week',
+				calendarSize: 2
+			});
+
+			function changeDate() {
+				document.getElementById("dates").value = nowCal.getVal();
+			};
+	   </script>
+			
+		<div id="mapid" style="height: 500px; margin: 0px; padding: 0px;" class="after-box"></div>
+
+		<style>
+			.box {
+				float: left;
+				margin: 1em;
+			}
+
+			.after-box {
+				clear: left;
+			}
+
+			.info {
+				padding: 8px 10px;
+				font: 14px/20px Arial, Helvetica, sans-serif;
+				background: white;
+				background: rgba(255,255,255,0.8);
+				box-shadow: 0 0 15px rgba(0,0,0,0.2);
+				border-radius: 5px;
+			}
+			.info h4 {
+				margin: 0 0 5px;
+				color: #777;
+			}
+			.legend {
+				line-height: 18px;
+				color: #555;
+			}
+			.legend i {
+				width: 18px;
+				height: 18px;
+				float: left;
+				margin-right: 8px;
+				opacity: 0.7;
+			}
+		</style>
+		
+		<script>
+			var mymap = L.map('mapid', {zoomControl: false}).setView([33.630002, -2.485636], 7);
+
+			var zoom_bar = new L.Control.ZoomBar({position: 'topleft'}).addTo(mymap);
+
+			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+			}).addTo(mymap);
+
+			function changeDay() {
+				var date = document.getElementById("dates").value;
+				var days = date.substring(8, 10);
+				document.getElementById("day").value = days;
+			};
+
+			function stylisermonFeature(feature) {
+				return {
+					weight: 2,
+					Opacity: 1,
+					color: 'gray',
+					dasharray: '3',
+					fillOpacity: 0.7,
+					fillColor: getColor(feature.properties.Cas)
+				};
+			}
+
+			function getColor(attribut) {
+				return attribut < 1 ? '#ffffd4' :
+						attribut < 2 ? '#fee391' :
+						attribut < 3 ? '#fec44f' :
+										'#fe9929' ;
+			}
+
+			geojson = L.geoJSON(nov29, {
+			 	onEachFeature: onEachFeature, style: stylisermonFeature
+			});
+
+			geojson.addTo(mymap);
+
+			function mapIt(days, map, layer) {
+				var days = document.getElementById("day").value;
+				map.removeLayer(layer);
+
+				if (days=="22") {
+					layer = L.geoJSON(nov22, {
+						onEachFeature: onEachFeature, style: stylisermonFeature
+					});
+					
+				} else if (days=="23") {
+					layer = L.geoJSON(nov23, {
+						onEachFeature: onEachFeature, style: stylisermonFeature
+					});
+					
+				} else if (days=="24") {
+					layer = L.geoJSON(nov24, {
+						onEachFeature: onEachFeature, style: stylisermonFeature
+					});
+					
+				} else if (days=="25") {
+					layer = L.geoJSON(nov25, {
+						onEachFeature: onEachFeature, style: stylisermonFeature
+					});
+				} else if (days=="26") {
+					layer = L.geoJSON(nov26, {
+						onEachFeature: onEachFeature, style: stylisermonFeature
+					});
+					
+				} else if (days=="27") {
+					layer = L.geoJSON(nov27, {
+						onEachFeature: onEachFeature, style: stylisermonFeature
+					});
+					
+				} else if (days=="28") {
+					layer = L.geoJSON(nov28, {
+						onEachFeature: onEachFeature, style: stylisermonFeature
+					});
+					
+				} else if (days=="29") {
+					layer = L.geoJSON(nov29, {
+						onEachFeature: onEachFeature, style: stylisermonFeature
+					});
+					
+				}
+
+				layer.addTo(map);
+			}
+
+			var info = L.control();
+
+			function highlightFeature(e) {
+				var layer = e.target;
+				layer.setStyle({
+					weight: 5,
+					color: '#666',
+					dashArray: '',
+					fillOpacity: 0.7
+				});
+				if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+					layer.bringToFront();
+				}
+					info.update(layer.feature.properties);
+			}
+
+			function resetHighlight(e) {
+				geojson.resetStyle(e.target);
+					info.update();
+			}
+
+			function zoomToFeature(e) {
+				map.fitBounds(e.target.getBounds());
+			}
+
+			function onEachFeature(feature, layer) {
+				layer.on({
+					mouseover: highlightFeature,
+					mouseout: resetHighlight,
+					click: zoomToFeature
+				});
+			}
+			
+			info.onAdd = function (mymap) {
+				this._div = L.DomUtil.create('div', 'info');
+				this.update();
+				return this._div;
+			};
+			info.update = function (props) {
+				this._div.innerHTML = '<h4>Cas confirmés par province</h4>' + (props ?
+					'Province : <b>'+ props.Nom_Provin + ' </b><br />Cas confirmés : ' + props.Cas + ' </b><br />Décès : ' + props.Deces
+					: 'Merci de mettre le curseur sur une province');
+			};
+
+			info.addTo(mymap);
+
+			var legend = L.control({position: 'bottomright'});
+				legend.onAdd = function (mymap) {
+					var div = L.DomUtil.create('div', 'info legend'),
+						grades = [0, 1, 2, 3, 4],
+						labels = [];
+
+					for (var i = 0; i < grades.length; i++) {
+						div.innerHTML +=
+							'<i style="background:' + getColor(grades[i + 1]) + '"></i> ' +
+							grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+					}
+					return div;
+			};
+
+			legend.addTo(mymap);
+
+
+		</script>
+	</section>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-lg-8 mx-auto">
+                    <ul class="list-inline text-center">
+                        <li class="list-inline-item"><span class="fa-stack fa-lg"><a href="https://www.linkedin.com/in/anass-yarroudh/"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-linkedin fa-stack-1x fa-inverse"></i></span></li></a>
+                        <li class="list-inline-item"><span class="fa-stack fa-lg"><a href="https://www.facebook.com/anass.yarroudh1/"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-facebook fa-stack-1x fa-inverse"></i></span></li></a>
+                        <li class="list-inline-item"><span class="fa-stack fa-lg"><a href="https://github.com/Yarroudh"><i class="fa fa-circle fa-stack-2x"></i><i class="fa fa-github fa-stack-1x fa-inverse"></i></span></li></a>
+                    </ul>
+                    <p class="text-muted copyright">Copyright&nbsp;©&nbsp;YARROUDH ANASS. Mini-projet de Web Mapping. 2022</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="js/clean-blog.js"></script>
+</body>
+
+</html>
