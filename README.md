@@ -45,8 +45,8 @@ Ce projet explore cette nouvelle ère de la cartographie et présente la manièr
                             <td><a href="https://leafletjs.com/" style="color: blue; margin-bottom: 20px; margin-top: 5px;">Documentation de Leaflet</a></td>
                         </tr>
                         <tr>
-                            <td>Mobiscroll</td>
-                            <td><a href="https://docs.mobiscroll.com/" style="color: blue; margin-bottom: 20px; margin-top: 5px;">Documentation de Mobiscroll API</a></td>
+                            <td>Flatpickr</td>
+                            <td><a href="https://flatpickr.js.org/" style="color: blue; margin-bottom: 20px; margin-top: 5px;">Documentation de Flatpickr</a></td>
                         </tr>
                         <tr>
                             <td>PHP</td>
