@@ -12,8 +12,11 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
     <link rel="stylesheet" href="fonts/font-awesome.min.css">
 
-    <link rel="stylesheet" href="css/leaflet.css" />
+    <link rel="stylesheet" href="css/leaflet.css">
+	<link rel="stylesheet" href="css/calendar.css">
+
 	<script src="js/leaflet.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
     <script src="json/22_11_2021.geojson" type="text/javascript"></script>
 	<script src="json/23_11_2021.geojson" type="text/javascript"></script>
@@ -29,11 +32,11 @@
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
 
-	<link href="css/mobiscroll.javascript.min.css" rel="stylesheet" />
-	<script src="js/mobiscroll.javascript.min.js"></script>
-
-	<link rel="stylesheet" type="text/css" href="css/L.Control.ZoomBar.css"/>
+	<link rel="stylesheet" href="css/L.Control.ZoomBar.css"/>
 	<script type="text/javascript" src="js/L.Control.ZoomBar.js"></script>
+
+	<link rel="stylesheet" href="css/Control.FullScreen.css"/>
+	<script type="text/javascript" src="js/Control.FullScreen.js"></script>
 </head>
 
 <body>
@@ -63,50 +66,40 @@
     </header>
 
 	<section>
-			<div style="width: 550px; margin: 20px; display: inline-block" class="box">
-				<label style="font-weight: bold;">
-					Bulletin Quotidien :
-					<input id="demo-date" mbsc-input placeholder="Merci de choisir une date" value="" onchange="changeDate(); changeDay(); mapIt(day, mymap, geojson);"/>
-				</label>
-			</div>
+		
+		<div class="container" style="margin-top: 40px;">
+			<div class="row">
+				<div class="col">
+					<div class="card">
+						<div class="card-header" style="font-size: medium;">Choisir une date</div>
+						<div class="card-body" id="datetimepicker-dashboard" onChange="changeDate(); changeDay(); mapIt(day, mymap, geojson);"></div>
+					</div>
+				</div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var date = new Date(Date.now() - 5 * 24 * 60 * 60 * 1000);
+                var defaultDate = date.getUTCFullYear() + "-" + (date.getUTCMonth() + 1) + "-" + date.getUTCDate();
+                document.getElementById("datetimepicker-dashboard").flatpickr({
+                    inline: true,
+                    minDate: "2021-11-22",
+                    maxDate: "2021-11-29",
+                    defaultDate: "2021-11-29"
+                });
+            });
+            function changeDate() {
+                document.getElementById("dates").value = document.getElementById("datetimepicker-dashboard").value;
+            };
+        </script>
 
 			<input type="hidden" id="dates" value="" />
 			<input type="hidden" id="day" value="" />
 
-
-		<script>
-			mobiscroll.setOptions({
-				locale: mobiscroll.localeFr,
-				theme: 'ios',
-				themeVariant: 'light',
-				dateFormat: 'DDD D MMM YYYY',
-			});
-
-			var nowCal = mobiscroll.datepicker('#demo-date', {
-				controls: ['calendar'],
-				min: '2021-11-22',
-				max: '2021-11-29',
-				calendarType: 'week',
-				calendarSize: 2
-			});
-
-			function changeDate() {
-				document.getElementById("dates").value = nowCal.getVal();
-			};
-	   </script>
-			
-		<div id="mapid" style="height: 500px; margin: 0px; padding: 0px;" class="after-box"></div>
+			<div class="col-8">
+				<div id="mapid" style="height: 500px; margin: 0px; padding: 0px;"></div>
+			</div>
 
 		<style>
-			.box {
-				float: left;
-				margin: 1em;
-			}
-
-			.after-box {
-				clear: left;
-			}
-
 			.info {
 				padding: 8px 10px;
 				font: 14px/20px Arial, Helvetica, sans-serif;
@@ -133,9 +126,24 @@
 		</style>
 		
 		<script>
-			var mymap = L.map('mapid', {zoomControl: false}).setView([33.630002, -2.485636], 7);
+			var mymap = L.map('mapid', {
+				zoomControl: false,
+				fullscreenControl: true,
+				fullscreenControlOptions: {
+					position: 'bottomleft',
+					title:"Afficher en plein écran",
+					titleCancel:"Quitter le mode plein écran"
+				}
+			}).setView([33.630002, -2.485636], 7);
 
 			var zoom_bar = new L.Control.ZoomBar({position: 'topleft'}).addTo(mymap);
+
+			mymap.on('enterFullscreen', function(){
+				if(window.console) window.console.log('enterFullscreen');
+			});
+			mymap.on('exitFullscreen', function(){
+				if(window.console) window.console.log('exitFullscreen');
+			});
 
 			L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -159,10 +167,10 @@
 			}
 
 			function getColor(attribut) {
-				return attribut < 1 ? '#ffffd4' :
-						attribut < 2 ? '#fee391' :
-						attribut < 3 ? '#fec44f' :
-										'#fe9929' ;
+				return attribut < 1 ? '#feedde' :
+						attribut < 2 ? '#fdbe85' :
+						attribut < 3 ? '#fd8d3c' :
+										'#d94701' ;
 			}
 
 			geojson = L.geoJSON(nov29, {
@@ -258,7 +266,7 @@
 				return this._div;
 			};
 			info.update = function (props) {
-				this._div.innerHTML = '<h4>Cas confirmés par province</h4>' + (props ?
+				this._div.innerHTML = '<h6>Cas confirmés par province</h6>' + (props ?
 					'Province : <b>'+ props.Nom_Provin + ' </b><br />Cas confirmés : ' + props.Cas + ' </b><br />Décès : ' + props.Deces
 					: 'Merci de mettre le curseur sur une province');
 			};
@@ -268,7 +276,7 @@
 			var legend = L.control({position: 'bottomright'});
 				legend.onAdd = function (mymap) {
 					var div = L.DomUtil.create('div', 'info legend'),
-						grades = [0, 1, 2, 3, 4],
+						grades = [0, 1, 2, 3],
 						labels = [];
 
 					for (var i = 0; i < grades.length; i++) {
@@ -280,7 +288,6 @@
 			};
 
 			legend.addTo(mymap);
-
 
 		</script>
 	</section>
